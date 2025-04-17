@@ -175,5 +175,5 @@ cython_debug/
 
 
 # Processed & Uploaded images files 
-processed_images/*
-uploaded_images/*
+master/web-page/processed_images/*
+master/web-page/uploaded_images/*
