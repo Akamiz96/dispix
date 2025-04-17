@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+
+# Processed & Uploaded images files 
+processed_images/*
+uploaded_images/*
