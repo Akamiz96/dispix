@@ -1,5 +1,23 @@
-/* static/style.css */
+/*
+------------------------------------------------------------------------------
+ARCHIVO: style.css
+DESCRIPCIÓN: Estilos visuales del sistema DisPix. Define la apariencia de la
+             interfaz web, incluyendo el layout, botones, formularios y vistas
+             de carga y resultados. Este CSS aplica tanto a index.html como a
+             results.html.
+AUTOR: Alejandro Castro Martínez
+FECHA DE CREACIÓN: 2025-04-17
+ÚLTIMA MODIFICACIÓN: 2025-04-17
+DEPENDENCIAS: Ninguna específica (estilo puro)
+CONTEXTO:
+    - Proyecto DisPix: Sistema distribuido para aplicar filtros sobre imágenes.
+    - Este archivo es cargado por Flask desde /static/style.css.
+------------------------------------------------------------------------------
+*/
 
+/* ----------------------------------------
+   Estilo general del cuerpo del documento
+---------------------------------------- */
 body {
 	font-family: "Roboto", sans-serif;
 	background-color: #e3e1e0;
@@ -10,6 +28,9 @@ body {
 	align-items: center;
 }
 
+/* --------------------------
+   Encabezado y branding
+-------------------------- */
 .header {
 	text-align: center;
 	padding: 0px 10px 20px;
@@ -41,6 +62,9 @@ body {
 	color: #2e7d32;
 }
 
+/* --------------------------
+   Contenedor principal
+-------------------------- */
 .container {
 	width: 90%;
 	max-width: fit-content;
@@ -48,6 +72,9 @@ body {
 	padding-bottom: 50px;
 }
 
+/* --------------------------
+   Títulos y etiquetas
+-------------------------- */
 h2,
 h4 {
 	text-align: center;
@@ -63,6 +90,9 @@ button {
 	margin-top: 10px;
 }
 
+/* --------------------------
+   Entradas y controles
+-------------------------- */
 input[type="file"],
 select {
 	padding: 10px;
@@ -70,6 +100,9 @@ select {
 	border: 1px solid #ccc;
 }
 
+/* --------------------------
+   Botón de envío
+-------------------------- */
 button {
 	margin-top: 20px;
 	padding: 12px;
@@ -86,6 +119,9 @@ button:hover {
 	background-color: #388e3c;
 }
 
+/* --------------------------
+   Pantallas dinámicas
+-------------------------- */
 .screen {
 	display: none;
 }
@@ -94,6 +130,9 @@ button:hover {
 	display: block;
 }
 
+/* --------------------------
+   Barra de progreso
+-------------------------- */
 .progress-bar {
 	width: 100%;
 	background-color: #e0e0e0;
@@ -113,6 +152,9 @@ button:hover {
 	transition: width 0.4s ease;
 }
 
+/* --------------------------
+   Imágenes cargadas
+-------------------------- */
 img {
 	display: block;
 	max-width: 100%;
@@ -120,6 +162,9 @@ img {
 	margin: 10px auto;
 }
 
+/* --------------------------
+   Formulario responsivo
+-------------------------- */
 .form-row {
 	display: flex;
 	justify-content: space-between;
@@ -133,6 +178,7 @@ img {
 	min-width: 200px;
 }
 
+/* Reajuste por redundancia (redefinido más abajo también) */
 input[type="file"],
 select {
 	padding: 10px;
@@ -141,6 +187,9 @@ select {
 	width: 100%;
 }
 
+/* --------------------------
+   Botón centrado en el formulario
+-------------------------- */
 .form-button {
 	display: flex;
 	justify-content: center;
@@ -160,7 +209,9 @@ button {
 	transition: background-color 0.3s ease;
 }
 
-/* Imagenes lado a lado */
+/* --------------------------
+   Visualización lado a lado
+-------------------------- */
 .image-row {
 	display: flex;
 	justify-content: center;
@@ -174,7 +225,7 @@ button {
 	text-align: center;
 }
 
-/* Tamaño y estilo de imagen */
+/* Tamaño y estilo de imagen en resultados */
 .image-box img {
 	width: 100%;
 	max-width: 560px;
@@ -182,6 +233,7 @@ button {
 	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Contenedor de resultados */
 .container-result {
 	margin: auto;
 	padding: 0 20px;
@@ -191,6 +243,9 @@ button {
 	align-items: center;
 }
 
+/* --------------------------
+   Indicador de carga tipo spinner
+-------------------------- */
 .spinner {
 	border: 6px solid #f3f3f3;
 	border-top: 6px solid #4caf50;

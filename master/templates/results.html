@@ -1,0 +1,61 @@
+<!--
+------------------------------------------------------------------------------
+ARCHIVO: results.html
+DESCRIPCIÓN: Página de resultados del sistema DisPix. Muestra la imagen original
+             cargada por el usuario junto con la versión procesada en paralelo.
+             Permite regresar al formulario para ejecutar una nueva tarea.
+AUTOR: Alejandro Castro Martínez
+FECHA DE CREACIÓN: 2025-04-17
+ÚLTIMA MODIFICACIÓN: 2025-04-17
+DEPENDENCIAS:
+    - style.css para la presentación visual
+    - Flask para renderizar imágenes vía url_for
+CONTEXTO:
+    - Proyecto DisPix.
+    - Esta plantilla es renderizada por Flask al finalizar el procesamiento.
+------------------------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Resultado DisPix</title>
+
+	<!-- Estilos visuales cargados desde Flask -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+	<!-- Encabezado con branding -->
+	<header class="header">
+		<img src="{{ url_for('static', filename='logo.png') }}" alt="Logo DisPix" class="logo" />
+		<p class="subtitle">Resultado de procesamiento distribuido</p>
+	</header>
+
+	<!-- Contenedor principal para mostrar imágenes comparativas -->
+	<div class="container container-result">
+		<div class="image-row">
+			<!-- Imagen original cargada por el usuario -->
+			<div class="image-box">
+				<h4>Original</h4>
+				<img src="{{ url_for('uploaded_images', filename=original_filename) }}" alt="Imagen original">
+			</div>
+
+			<!-- Imagen procesada por los workers -->
+			<div class="image-box">
+				<h4>Procesada</h4>
+				<img src="{{ url_for('processed_images', filename=processed_filename) }}" alt="Imagen procesada">
+			</div>
+		</div>
+
+		<!-- Botón para volver a iniciar otra tarea -->
+		<div class="form-button">
+			<a href="{{ url_for('index') }}">
+				<button>Nueva tarea</button>
+			</a>
+		</div>
+	</div>
+
+</body>
+</html>
