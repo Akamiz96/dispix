@@ -1,16 +1,19 @@
 import redis
 import json
+import time
 
-# Conexión a Redis local
 redis_client = redis.Redis(host='localhost', port=6379, db=0)
 
-# Mensaje de prueba
-message = {
-    "block_id": "0_0",
-    "filter": "blur",
-    "info": "Mensaje de prueba desde el máster"
-}
+print("📤 [Publisher] Iniciando publicación de bloques...")
 
-# Publicar en el canal
-redis_client.publish("dispix-tasks", json.dumps(message))
-print("✅ Mensaje publicado en 'dispix-tasks'")
+for i in range(1, 6):  # simular 5 bloques
+    message = {
+        "block_id": f"{i}_0",
+        "filter": "blur",
+        "info": f"Bloque {i} enviado por Publisher"
+    }
+    redis_client.publish("dispix-tasks", json.dumps(message))
+    print(f"📤 [Publisher] Mensaje publicado: {message}")
+    time.sleep(0.5)  # pausa para ver mensajes en tiempo real
+
+print("✅ [Publisher] Publicación finalizada.")
