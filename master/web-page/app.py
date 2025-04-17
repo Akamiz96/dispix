@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory, url_for, redirect
 import os
 import time
 import cv2
@@ -15,7 +15,7 @@ from utils.image_reconstructor import reconstruir_y_guardar_imagen
 import uuid 
 
 app = Flask(__name__)
-UPLOAD_FOLDER = "data/uploads"
+UPLOAD_FOLDER = "data/uploaded_images"
 RECEIVED_DIR = "data/received_blocks"
 PROCESSED_IMAGES = "data/processed_images"
 LOG_DIR = "data/logs"
@@ -141,11 +141,43 @@ def receive_result():
         print(f"✅ Procesamiento completo en {total_time:.2f} segundos.")
         
         task_id = current_task.get("task_id", "unknown")
-        output_path = os.path.join(PROCESSED_IMAGES, f"reconstructed_{task_id}.png")
+        filename = f"reconstructed_{task_id}.png"
+        output_path = os.path.join(PROCESSED_IMAGES, filename)
         reconstruir_y_guardar_imagen(current_task["received_data"], output_path)
-
+        current_task["original_filename"] = f"uploaded_{task_id}.png"
+        current_task["processed_filename"] = f"reconstructed_{task_id}.png"
+        print("[DEBUG] Redirigiendo a:", url_for("result_page", task_id=task_id))
+        return jsonify({"status": "ok", "blocks": current_task["blocks_received"], "redirect": url_for("result_page", task_id=task_id)})
 
     return jsonify({"status": "ok"})
+
+@app.route("/uploaded_images/<filename>")
+def uploaded_images(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
+
+@app.route("/processed_images/<filename>")
+def processed_images(filename):
+    return send_from_directory(PROCESSED_IMAGES, filename)
+
+@app.route("/result/<task_id>")
+def result_page(task_id):
+    print(f"Accediendo a la página de resultados para la tarea {task_id}")
+    original = current_task.get("original_filename")
+    processed = current_task.get("processed_filename")
+    return render_template("results.html", original_filename=original, processed_filename=processed)
+
+@app.route("/status")
+def check_status():
+    is_done = current_task["blocks_received"] == current_task["total_blocks"]
+    task_id = current_task.get("task_id")
+    if is_done:
+        return jsonify({
+            "done": True,
+            "redirect": url_for("result_page", task_id=task_id)
+        })
+    else:
+        return jsonify({"done": False})
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000, debug=True)

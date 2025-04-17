@@ -1,0 +1,34 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<title>Resultado DisPix</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+	<header class="header">
+		<img src="{{ url_for('static', filename='logo.png') }}" alt="Logo DisPix" class="logo" />
+		<p class="subtitle">Resultado de procesamiento distribuido</p>
+	</header>
+
+	<div class="container container-result">
+		<div class="image-row">
+			<div class="image-box">
+				<h4>Original</h4>
+				<img src="{{ url_for('uploaded_images', filename=original_filename) }}" alt="Imagen original">
+			</div>
+			<div class="image-box">
+				<h4>Procesada</h4>
+				<img src="{{ url_for('processed_images', filename=processed_filename) }}" alt="Imagen procesada">
+			</div>
+		</div>
+
+		<div class="form-button">
+			<a href="{{ url_for('index') }}">
+				<button>Nueva tarea</button>
+			</a>
+		</div>
+	</div>
+</body>
+</html>

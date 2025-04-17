@@ -59,36 +59,10 @@
 		<!-- Pantalla 2: Espera / Progreso -->
 		<div id="screen-progress" class="screen">
 			<h2>Procesando imagen...</h2>
-			<p>Bloques enviados al pub-sub:</p>
-			<div class="progress-bar">
-				<div id="progress-sent" class="progress-bar-fill">0%</div>
-			</div>
-
-			<p>Bloques recibidos de los workers:</p>
-			<div class="progress-bar">
-				<div id="progress-received" class="progress-bar-fill">0%</div>
-			</div>
+			<p>Por favor espera mientras reconstruimos la imagen.</p>
+			<div class="spinner"></div>
 		</div>
 
-		<!-- Pantalla 3: Resultado final -->
-		<div id="screen-result" class="screen">
-			<div class="container container-result">
-				<div class="image-row">
-					<div class="image-box">
-						<h4>Original</h4>
-						<img id="original-image" src="#" alt="Original" />
-					</div>
-					<div class="image-box">
-						<h4>Procesada</h4>
-						<img id="processed-image" src="#" alt="Procesada" />
-					</div>
-				</div>
-
-				<div class="form-button">
-					<button onclick="goToUpload()">Nueva tarea</button>
-				</div>
-			</div>
-		</div>
 
 		<script src="/static/script.js"></script>
 	</body>
