@@ -20,72 +20,91 @@ CONTEXTO:
 
 <!DOCTYPE html>
 <html lang="es">
-	<head>
-		<meta charset="UTF-8" />
-		<title>DisPix</title>
 
-		<!-- Fuentes tipográficas desde Google Fonts -->
-		<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
-		<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
+<head>
+	<meta charset="UTF-8" />
+	<title>DisPix</title>
 
-		<!-- Enlaces a recursos estáticos del servidor Flask -->
-		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-		<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}" />
-	</head>
-	<body>
+	<!-- Fuentes tipográficas desde Google Fonts -->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
 
-		<!-- Encabezado con branding del proyecto -->
-		<header class="header">
-			<img
-				src="{{ url_for('static', filename='logo.png') }}"
-				alt="Logo DisPix"
-				class="logo" />
-			<p class="subtitle">A Distributed System for Parallel Image Filtering</p>
-			<a
-				href="https://github.com/Akamiz96/dispix"
-				class="github-link"
-				target="_blank">
-				🔗 View on GitHub
-			</a>
-		</header>
+	<!-- Enlaces a recursos estáticos del servidor Flask -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+	<link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}" />
+</head>
 
-		<!-- Pantalla 1: formulario para subir imagen y elegir filtro -->
-		<div id="screen-upload" class="screen active">
-			<h2>Cargar Imagen</h2>
-			<form id="upload-form">
-				<div class="form-row">
-					<!-- Selección de archivo de imagen -->
-					<div class="form-group">
-						<label for="image-input">Selecciona una imagen:</label>
-						<input type="file" id="image-input" accept="image/*" required />
-					</div>
+<body>
 
-					<!-- Selección del filtro a aplicar -->
-					<div class="form-group">
-						<label for="filter-select">Filtro:</label>
-						<select id="filter-select">
-							<option value="negative">Negativo</option>
-							<option value="blur">Desenfoque</option>
-							<option value="pixelate">Pixelar</option>
-						</select>
-					</div>
+	<!-- Encabezado con branding del proyecto -->
+	<header class="header">
+		<img src="{{ url_for('static', filename='logo.png') }}" alt="Logo DisPix" class="logo" />
+		<p class="subtitle">A Distributed System for Parallel Image Filtering</p>
+		<a href="https://github.com/Akamiz96/dispix" class="github-link" target="_blank">
+			🔗 View on GitHub
+		</a>
+	</header>
+
+	<!-- Pantalla 1: formulario para subir imagen y elegir filtro -->
+	<div id="screen-upload" class="screen active">
+		<h2>Cargar Imagen</h2>
+		<form id="upload-form">
+			<div class="form-row">
+				<!-- Selección de archivo de imagen -->
+				<div class="form-group">
+					<label for="image-input">Selecciona una imagen:</label>
+					<input type="file" id="image-input" accept="image/*" required />
 				</div>
 
-				<!-- Botón de envío -->
-				<div class="form-button">
-					<button type="submit">Procesar</button>
+				<!-- Selección del filtro a aplicar -->
+				<div class="form-group">
+					<label for="filter-select">Filtro:</label>
+					<select id="filter-select">
+						<option value="negative">Negativo</option>
+						<option value="sepia">Sepia</option>
+						<option value="pixelate">Pixelar</option>
+					</select>
 				</div>
-			</form>
-		</div>
+			</div>
 
-		<!-- Pantalla 2: mensaje de espera mientras se procesa -->
-		<div id="screen-progress" class="screen">
-			<h2>Procesando imagen...</h2>
-			<p>Por favor espera mientras reconstruimos la imagen.</p>
-			<div class="spinner"></div>
-		</div>
+			<!-- Selección del tamaño del bloque -->
+			<div class="form-group">
+				<label for="block-size-input">Cantidad de bloques por eje:</label>
+				<input type="number" id="block-size-input" name="block_size" value="32" min="1" max="1024" step="1"
+					required />
+			</div>
 
-		<!-- Lógica de envío, polling y visualización (script.js) -->
-		<script src="/static/script.js"></script>
-	</body>
+			<!-- Botón de envío -->
+			<div class="form-button">
+				<button type="submit">Procesar</button>
+			</div>
+		</form>
+	</div>
+
+	<!-- Pantalla 2: mensaje de espera mientras se procesa -->
+	<div id="screen-progress" class="screen">
+		<h2>Procesando imagen...</h2>
+		<p>Por favor espera mientras reconstruimos la imagen.</p>
+		<div class="spinner"></div>
+		
+		<!-- Mensaje si hubo reintento -->
+		<div id="retry-message" style="display:none; color: #ff9800; font-weight: bold; margin-top: 20px;">
+			⚠️ Se detectó un problema. Algunos bloques fueron reenviados automáticamente.
+		</div>
+	</div>
+
+	<!-- Pantalla de error final -->
+	<div id="screen-error" class="screen container">
+		<h2>❌ Error durante el procesamiento</h2>
+		<p>Lo sentimos, no se pudieron recibir todos los bloques procesados tras varios intentos.</p>
+		<p>Por favor intenta nuevamente o prueba con otra imagen.</p>
+		<a href="/">
+			<button>Volver al inicio</button>
+		</a>
+	</div>
+
+	<!-- Lógica de envío, polling y visualización (script.js) -->
+	<script src="/static/script.js"></script>
+</body>
+
 </html>

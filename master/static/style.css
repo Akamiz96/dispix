@@ -260,3 +260,21 @@ button {
 	0% { transform: rotate(0deg); }
 	100% { transform: rotate(360deg); }
 }
+
+/* Estilo personalizado para el input de tamaño de bloque */
+#block-size-input {
+	padding: 10px;
+	border-radius: 6px;
+	border: 1px solid #ccc;
+	background-color: #f9f9f9;
+	font-size: 16px;
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Estilo cuando el input está enfocado */
+#block-size-input:focus {
+	border-color: #4caf50;
+	box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+	outline: none;
+}

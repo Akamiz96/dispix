@@ -18,6 +18,7 @@ CONTEXTO:
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 	<meta charset="UTF-8">
 	<title>Resultado DisPix</title>
@@ -25,6 +26,7 @@ CONTEXTO:
 	<!-- Estilos visuales cargados desde Flask -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
+
 <body>
 
 	<!-- Encabezado con branding -->
@@ -46,6 +48,14 @@ CONTEXTO:
 			<div class="image-box">
 				<h4>Procesada</h4>
 				<img src="{{ url_for('processed_images', filename=processed_filename) }}" alt="Imagen procesada">
+
+				<!-- Botón para descargar la imagen procesada -->
+				<div style="margin-top: 20px;">
+					<a href="{{ url_for('download_image', filename='reconstructed_' + task_id + '.png') }}" download>
+						<button>📥 Descargar Imagen Procesada</button>
+					</a>
+				</div>
+
 			</div>
 		</div>
 
@@ -58,4 +68,5 @@ CONTEXTO:
 	</div>
 
 </body>
+
 </html>

@@ -35,9 +35,28 @@ def aplicar_filtro(img, filtro):
         # Invierte los valores de los píxeles para crear un efecto negativo
         return cv2.bitwise_not(img)
 
-    elif filtro == "blur":
-        # Aplica desenfoque gaussiano con un kernel 15x15
-        return cv2.GaussianBlur(img, (15, 15), 0)
+    elif filtro == "sepia":
+        # Conversión a float para evitar sobreflujo durante la multiplicación
+        img_float = img.astype(np.float64)
+
+        # Separar canales
+        B = img_float[:, :, 0]
+        G = img_float[:, :, 1]
+        R = img_float[:, :, 2]
+
+        # Aplicar fórmula sepia a cada canal (vectorizada)
+        tr = 0.393 * R + 0.769 * G + 0.189 * B
+        tg = 0.349 * R + 0.686 * G + 0.168 * B
+        tb = 0.272 * R + 0.534 * G + 0.131 * B
+
+        # Limitar a rango válido
+        sepia = np.stack([
+            np.clip(tb, 0, 255),
+            np.clip(tg, 0, 255),
+            np.clip(tr, 0, 255)
+        ], axis=-1)
+
+        return sepia.astype(np.uint8)
 
     elif filtro == "pixelate":
         # Reduce la imagen y la vuelve a escalar para crear efecto pixelado

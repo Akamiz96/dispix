@@ -32,17 +32,26 @@ function showScreen(screenId) {
  * Función de polling que consulta al servidor cada 2 segundos
  * para verificar si el resultado ya está disponible.
  * Si lo está, redirige automáticamente a la página de resultados.
+ * 
+ * @param {string} taskId - Identificador único de la tarea que se está procesando.
  */
-function pollForResult() {
-	fetch("/status")
+function pollForResult(taskId) {
+	fetch("/status?task_id=" + taskId)
 		.then(response => response.json())
 		.then(data => {
-			if (data.done && data.redirect) {
-				// Redirecciona al usuario cuando el procesamiento esté completo
-				window.location.href = data.redirect;
+			if (data.retry) {
+				const retryMsg = document.getElementById("retry-message");
+				if (retryMsg) retryMsg.style.display = "block";
+			}
+
+			if (data.done) {
+				if (data.error) {
+					showScreen("error");
+				} else if (data.redirect) {
+					window.location.href = data.redirect;
+				}
 			} else {
-				// Espera 2 segundos y vuelve a consultar
-				setTimeout(pollForResult, 2000);
+				setTimeout(() => pollForResult(taskId), 2000);
 			}
 		});
 }
@@ -57,8 +66,17 @@ document.getElementById("upload-form").addEventListener("submit", async function
 
 	const imageInput = document.getElementById("image-input");
 	const filterSelect = document.getElementById("filter-select");
+	const blockSizeInput = document.getElementById("block-size-input");
 
+	// Validación del archivo
 	if (imageInput.files.length === 0) return;
+
+	// Validación del tamaño del bloque
+	const blockSize = parseInt(blockSizeInput.value);
+	if (isNaN(blockSize) || blockSize < 1 || blockSize > 1024) {
+		alert("⚠️ El tamaño del bloque debe estar entre 1 y 1024 píxeles.");
+		return;
+	}
 
 	const file = imageInput.files[0];
 	const reader = new FileReader();
@@ -70,12 +88,13 @@ document.getElementById("upload-form").addEventListener("submit", async function
 		const formData = new FormData();
 		formData.append("image", imageBase64);
 		formData.append("filter", filterSelect.value);
+		formData.append("block_size", blockSize);  // 🧩 nuevo dato enviado
 
 		// Cambia la pantalla a modo progreso
 		showScreen("progress");
 
 		try {
-			// Envia imagen y filtro al backend
+			// Envia imagen, filtro y tamaño de bloque al backend
 			const response = await fetch("/process", {
 				method: "POST",
 				body: formData,
@@ -83,8 +102,11 @@ document.getElementById("upload-form").addEventListener("submit", async function
 
 			const data = await response.json();
 			if (data.status === "ok") {
+				// 🆕 Extraer taskId del backend para hacer seguimiento independiente
+				const taskId = data.task_id;
+
 				// Si todo va bien, comienza a hacer polling para ver si ya terminó
-				pollForResult();
+				pollForResult(taskId);
 			}
 		} catch (error) {
 			console.error("Error al enviar imagen:", error);
